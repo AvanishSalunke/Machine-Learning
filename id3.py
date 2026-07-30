@@ -27,7 +27,10 @@ def build_tree(data, attributes, target_name, depth=0):
     node_entropy = entropy(data[target_name])
     print("depth", depth, "samples", len(data), "entropy", node_entropy)
 
-    gains = {attr: info_gain(data, attr, target_name) for attr in attributes}
+    gains = {}
+
+    for attr in attributes:
+        gains[attr] = info_gain(data, attr, target_name)
     for attr, gain in gains.items():
         print("  gain", attr, gain)
 
