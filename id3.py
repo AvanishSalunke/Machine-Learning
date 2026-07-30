@@ -65,6 +65,12 @@ def predict(tree, row, default="e"):
     return predict(subtree, row, default)
 
 df = pd.read_csv("mushrooms.csv")
+
+df.replace("?", np.nan, inplace=True)
+
+for col in df.columns:
+    df[col] = df[col].fillna(df[col].mode()[0])
+
 target = "class"
 attributes = [c for c in df.columns if c != target]
 

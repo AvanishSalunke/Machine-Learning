@@ -5,8 +5,14 @@ from sklearn.preprocessing import LabelEncoder
 from sklearn.model_selection import train_test_split
 from sklearn.tree import DecisionTreeClassifier, export_text
 from sklearn.metrics import confusion_matrix, accuracy_score, precision_score, recall_score, f1_score
+import numpy as np
 
 df = pd.read_csv("mushrooms.csv")
+
+df.replace("?", np.nan, inplace=True)
+
+for col in df.columns:
+    df[col] = df[col].fillna(df[col].mode()[0])
 
 encoders = {}
 encoded_df = df.copy()
