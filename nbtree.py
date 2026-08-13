@@ -8,10 +8,6 @@ from sklearn.metrics import confusion_matrix, accuracy_score, precision_score, r
 
 df = pd.read_csv("mushrooms.csv")
 
-for col in df.columns:
-    df[col] = df[col].fillna(df[col].mode()[0])
-
-
 X = df.drop("class", axis=1)
 y = df["class"].map({"e": 0, "p": 1})
 

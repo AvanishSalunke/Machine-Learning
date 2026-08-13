@@ -49,10 +49,6 @@ def predict(row, priors, probabilities):
 
 df = pd.read_csv("mushrooms.csv")
 
-for col in df.columns:
-    df[col] = df[col].fillna(df[col].mode()[0])
-
-
 target = "class"
 
 train_df, test_df = train_test_split(df, test_size=0.25, random_state=42)
