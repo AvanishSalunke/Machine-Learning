@@ -26,7 +26,6 @@ def train_naive_bayes(data, target):
                 count = len(class_data[class_data[attr] == value])
                 total = len(class_data)
 
-                # Laplace smoothing
                 probabilities[attr][value][c] = (count + 1) / (total + len(data[attr].unique()))
 
     return priors, probabilities
