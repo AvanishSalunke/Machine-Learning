@@ -11,14 +11,12 @@ X = df.drop("electricity cost", axis=1)
 y = df["electricity cost"].values
 
 encoder = OneHotEncoder(sparse_output=False, handle_unknown="ignore")
-X_cat = encoder.fit_transform(X[["structure type"]])
+X_cat = encoder.fit_transform(X["structure type"])
 
 X_num = X.drop("structure type", axis=1).values
 X = np.hstack((X_num, X_cat))
 
-X_train, X_test, y_train, y_test = train_test_split(
-    X, y, test_size=0.2, random_state=42
-)
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
 
 scaler = StandardScaler()
 X_train = scaler.fit_transform(X_train)
@@ -36,7 +34,7 @@ rmse = np.sqrt(mse)
 r2 = r2_score(y_test, y_pred)
 
 print("SGDRegressor")
-print("MAE:", mae)
-print("MSE:", mse)
-print("RMSE:", rmse)
-print("R2 Score:", r2)
+print("MAE:",mae)
+print("MSE:",mse)
+print("RMSE:",rmse)
+print("R2 Score:",r2)

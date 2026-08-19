@@ -16,9 +16,7 @@ X_cat = encoder.fit_transform(X[["structure type"]])
 X_num = X.drop("structure type", axis=1).values
 X = np.hstack((X_num, X_cat))
 
-X_train, X_test, y_train, y_test = train_test_split(
-    X, y, test_size=0.2, random_state=42
-)
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
 
 scaler = StandardScaler()
 X_train = scaler.fit_transform(X_train)
@@ -53,7 +51,7 @@ for epoch in range(epochs):
     errors.append(mse)
 
     if (epoch + 1) % 100 == 0:
-        print(f"Epoch: {epoch + 1}, MSE: {mse:.4f}")
+        print(f"Epoch:{epoch + 1}, MSE:{mse:.4f}")
 
 y_pred = np.dot(X_test, weights) + bias
 
