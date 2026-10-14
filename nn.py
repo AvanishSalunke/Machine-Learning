@@ -23,10 +23,10 @@ y_train = y_train.reshape(1, -1)
 
 n, m = X_train.shape
 
-layers = [n, 32, 16, 1]
+layers = [n, 3, 2, 1]
 L = len(layers) - 1
 
-learning_rate = 0.5
+learning_rate = 1
 epochs = 1000
 errors = []
 
@@ -60,10 +60,9 @@ for i in range(epochs):
         W[l] -= learning_rate * dW[l]
         b[l] -= learning_rate * db[l]
 
-    small = 1e-9
     error = -np.mean(
-        y_train * np.log(pred + small) +
-        (1 - y_train) * np.log(1 - pred + small)
+        y_train * np.log(pred) +
+        (1 - y_train) * np.log(1 - pred)
     )
 
     errors.append(error)
