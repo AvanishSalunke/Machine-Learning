@@ -16,7 +16,7 @@ X = data.drop("condition", axis = 1)
 y = data["condition"].values
 y = np.where(y == 0 , -1, 1)
 
-X_train, X_test, y_train, y_test = train_test_split(X, y, test_size = 0.2, random_state = 50)
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size = 0.2, random_state = 42)
 
 sc = StandardScaler()
 
