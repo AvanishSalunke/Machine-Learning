@@ -77,7 +77,7 @@ print(support_vectors)
 cols_names = X.columns
 sv_real = pd.DataFrame(sc.inverse_transform(support_vectors), columns = cols_names)
 sv_real["label"] = y_train[sv]
-print(sv_real.head(10))
+print(sv_real)
 
 score_test = np.dot(K_test, w) + b
 predicted = np.where(score_test >= 0, 1, -1)
