@@ -41,7 +41,7 @@ b = 0
 C = 10
 learning_rate = 0.01
 decay = 0.01
-epochs = 2000
+epochs = 1000
 errors = []
 
 for i in range(epochs):
@@ -59,7 +59,6 @@ for i in range(epochs):
 
     w = w - lr * dw
     b = b - lr * db
-
     if i % 200 == 0:
         print("epoch ", i, "loss = ", loss, "bad = ", bad.sum())
 
@@ -73,11 +72,6 @@ support_vectors = X_train[sv]
 
 print("no of support vectors = ", sv.sum())
 print(support_vectors)
-
-cols_names = X.columns
-sv_real = pd.DataFrame(sc.inverse_transform(support_vectors), columns = cols_names)
-sv_real["label"] = y_train[sv]
-print(sv_real)
 
 score_test = np.dot(K_test, w) + b
 predicted = np.where(score_test >= 0, 1, -1)

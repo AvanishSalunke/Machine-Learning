@@ -33,11 +33,6 @@ support_vectors = clf.support_vectors_
 print("no of support vectors = ", len(clf.support_))
 print(support_vectors)
 
-cols_names = X.columns
-sv_real = pd.DataFrame(sc.inverse_transform(support_vectors), columns = cols_names)
-sv_real["label"] = y_train[clf.support_]
-print(sv_real.head(10))
-
 predicted = clf.predict(X_test)
 
 print("Accuracy:", accuracy_score(y_test, predicted))

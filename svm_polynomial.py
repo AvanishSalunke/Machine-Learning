@@ -21,7 +21,7 @@ X_test = sc.transform(X_test)
 rows, cols = X_train.shape
 test_rows = X_test.shape[0]
 
-degree = 2
+degree = 1
 
 K_train = np.zeros((rows, rows))
 
@@ -73,11 +73,6 @@ support_vectors = X_train[sv]
 
 print("no of support vectors = ", sv.sum())
 print(support_vectors)
-
-cols_names = X.columns
-sv_real = pd.DataFrame(sc.inverse_transform(support_vectors), columns = cols_names)
-sv_real["label"] = y_train[sv]
-print(sv_real.head(10))
 
 score_test = np.dot(K_test, w) + b
 predicted = np.where(score_test >= 0, 1, -1)
