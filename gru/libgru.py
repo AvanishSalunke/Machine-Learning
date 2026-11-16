@@ -8,7 +8,7 @@ from tensorflow.keras.models import Sequential
 from tensorflow.keras.layers import Input, GRU, Dense
 from tensorflow.keras.optimizers import SGD
 
-data = pd.read_csv("mushrooms.csv")
+data = pd.read_csv("../datasets/mushrooms.csv")
 data = data.replace("?", np.nan)
 data = data.fillna(data.mode().iloc[0])
 X = data.drop("class", axis=1)

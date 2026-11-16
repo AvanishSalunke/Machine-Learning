@@ -1,10 +1,10 @@
 # Gated Recurrent Unit (GRU)
 
-Files: [gru.py](../gru.py) and [libgru.py](../libgru.py)
+Files: [gru.py](gru.py) and [libgru.py](libgru.py)
 
 ## Idea
 
-A GRU is a simpler cousin of the [LSTM](lstm.md). It has no separate cell state and only two gates, so it has fewer parameters and trains faster, while still being able to keep information over long sequences.
+A GRU is a simpler cousin of the [LSTM](../lstm/README.md). It has no separate cell state and only two gates, so it has fewer parameters and trains faster, while still being able to keep information over long sequences.
 
 - The **update gate** $\mathbf{z}_t$ decides how much of the old state to keep and how much to replace with new information.
 - The **reset gate** $\mathbf{r}_t$ decides how much of the old state is used when computing the new candidate.
