@@ -1,6 +1,6 @@
 # HMM Classifier
 
-Files: [hmmclassifier.py](../hmmclassifier.py), [datasethmmclassifier.py](../datasethmmclassifier.py) and [libhmmclassifier.py](../libhmmclassifier.py)
+Files: [hmmclassifier.py](hmmclassifier.py), [datasethmmclassifier.py](datasethmmclassifier.py) and [libhmmclassifier.py](libhmmclassifier.py)
 
 ## Idea
 
@@ -14,8 +14,8 @@ $$\hat{c} = \arg\max_{c} \; \Big[ \ln P(c) + \ln P(O \mid \lambda_c) \Big]$$
 
 ## Ingredients
 
-- **Training each class model** uses the [Baum-Welch algorithm](hmm-baum-welch.md) on all sequences of the class. With several sequences, the expected counts $\gamma$ and $\xi$ are summed over all of them before the update.
-- **Scoring a sequence** uses the forward algorithm from [hmm-forward-backward.md](hmm-forward-backward.md) to get $P(O \mid \lambda_c)$.
+- **Training each class model** uses the [Baum-Welch algorithm](../hmm-baum-welch/README.md) on all sequences of the class. With several sequences, the expected counts $\gamma$ and $\xi$ are summed over all of them before the update.
+- **Scoring a sequence** uses the forward algorithm from [hmm-forward-backward.md](../hmm-forward-backward/README.md) to get $P(O \mid \lambda_c)$.
 - **The prior** is the class frequency in the training set, $P(c) = N_c / N$.
 
 ## What the code does
@@ -29,8 +29,8 @@ Every mushroom is treated as a sequence: its attribute values in column order, e
 - Each test sequence goes through the forward pass of both models. The score of a class is $\ln P(O \mid \lambda_c) + \ln P(c)$ and the larger one wins.
 - It prints accuracy, precision, recall, F1 and the confusion matrix.
 
-[datasethmmclassifier.py](../datasethmmclassifier.py) is the general version. It reads `dataset.csv` and uses the column named `class` as the target, converts all columns to integer codes, and trains one HMM for each class found. For more than two classes it reports macro averaged precision, recall and F1. `dataset.csv` is not included in this repository.
+[datasethmmclassifier.py](datasethmmclassifier.py) is the general version. It reads `dataset.csv` and uses the column named `class` as the target, converts all columns to integer codes, and trains one HMM for each class found. For more than two classes it reports macro averaged precision, recall and F1. `dataset.csv` is not included in this repository.
 
 ## Library version
 
-[libhmmclassifier.py](../libhmmclassifier.py) trains one `hmmlearn.hmm.CategoricalHMM` per class (3 states, 20 iterations, trained on all sequences of the class with the `lengths` argument) and scores each test sequence with `model.score`, adding the log prior.
+[libhmmclassifier.py](libhmmclassifier.py) trains one `hmmlearn.hmm.CategoricalHMM` per class (3 states, 20 iterations, trained on all sequences of the class with the `lengths` argument) and scores each test sequence with `model.score`, adding the log prior.
