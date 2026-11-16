@@ -1,6 +1,6 @@
 # AdaBoost
 
-Files: [adaboost.py](../adaboost.py) and [libadaboost.py](../libadaboost.py)
+Files: [adaboost.py](adaboost.py) and [libadaboost.py](libadaboost.py)
 
 ## Idea
 
