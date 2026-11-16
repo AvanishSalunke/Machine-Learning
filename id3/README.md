@@ -1,6 +1,6 @@
 # ID3 Decision Tree
 
-Files: [id3.py](../id3.py), [id3_3.py](../id3_3.py) and the library version [id3tree.py](../id3tree.py)
+Files: [id3.py](id3.py), [id3_3.py](id3_3.py) and the library version [id3tree.py](id3tree.py)
 
 ## Idea
 
@@ -38,11 +38,11 @@ This is a multi-way split: a feature with 5 values gives 5 branches, and a featu
 ## What the code does
 
 - Data: `mushrooms.csv`, where `?` is replaced by the column mode. Target: edible = 0, poisonous = 1. 80/20 split with `random_state=42`.
-- [id3.py](../id3.py) builds the tree with a node list (each node stores its rows, remaining features, parent, chosen feature, children and label) and prints the gain of every feature at each node.
+- [id3.py](id3.py) builds the tree with a node list (each node stores its rows, remaining features, parent, chosen feature, children and label) and prints the gain of every feature at each node.
 - After building, it prints the tree as if-then rules, one per leaf.
 - At prediction time a row follows the branches. If it meets a feature value that was not seen during training at that node, it stops there and uses that node's majority class.
-- [id3_3.py](../id3_3.py) runs the same tree builder three times with different split criteria in a loop: gain ratio, Gini index and misclassification error. See [gain-ratio.md](gain-ratio.md), [gini-index.md](gini-index.md) and [misclassification-error.md](misclassification-error.md).
+- [id3_3.py](id3_3.py) runs the same tree builder three times with different split criteria in a loop: gain ratio, Gini index and misclassification error. See [gain-ratio.md](../gain-ratio/README.md), [gini-index.md](../gini-index/README.md) and [misclassification-error.md](../misclassification-error/README.md).
 
 ## Library version
 
-[id3tree.py](../id3tree.py) uses scikit-learn's `DecisionTreeClassifier(criterion="entropy")`. The criterion is the same, but scikit-learn builds binary trees (each node asks a yes or no question like `feature <= value`), so categories are first converted to integer codes. The tree shape and depth can therefore differ from the multi-way ID3 tree. It prints the tree with `export_text` and also shows the depth and number of leaves.
+[id3tree.py](id3tree.py) uses scikit-learn's `DecisionTreeClassifier(criterion="entropy")`. The criterion is the same, but scikit-learn builds binary trees (each node asks a yes or no question like `feature <= value`), so categories are first converted to integer codes. The tree shape and depth can therefore differ from the multi-way ID3 tree. It prints the tree with `export_text` and also shows the depth and number of leaves.
