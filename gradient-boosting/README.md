@@ -1,6 +1,6 @@
 # Gradient Boosting
 
-Files: [gradientboosting.py](../gradientboosting.py) and [libgradientboosting.py](../libgradientboosting.py)
+Files: [gradientboosting.py](gradientboosting.py) and [libgradientboosting.py](libgradientboosting.py)
 
 ## Idea
 
@@ -48,4 +48,4 @@ $$F_0 = \ln \frac{\bar{y}}{1 - \bar{y}}$$
 
 `libgradientboosting.py` uses scikit-learn's `GradientBoostingClassifier(n_estimators=100, learning_rate=0.1, max_depth=1)`. The training loss curve comes from `train_score_`.
 
-See [xgboost.md](xgboost.md) for the second order version of this idea.
+See [xgboost.md](../xgboost/README.md) for the second order version of this idea.
