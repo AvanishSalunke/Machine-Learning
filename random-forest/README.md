@@ -1,10 +1,10 @@
 # Random Forest
 
-Files: [randomforest.py](../randomforest.py) and [librandomforest.py](../librandomforest.py)
+Files: [randomforest.py](randomforest.py) and [librandomforest.py](librandomforest.py)
 
 ## Idea
 
-A random forest is [bagging](bagging.md) of decision trees with one extra source of randomness. In bagging, all trees tend to choose the same strong features near the root, so they end up similar and their errors are correlated. A random forest limits each split to a random subset of the features, which makes the trees more different from each other. Averaging less correlated trees reduces variance more.
+A random forest is [bagging](../bagging/README.md) of decision trees with one extra source of randomness. In bagging, all trees tend to choose the same strong features near the root, so they end up similar and their errors are correlated. A random forest limits each split to a random subset of the features, which makes the trees more different from each other. Averaging less correlated trees reduces variance more.
 
 ## The two kinds of randomness
 
@@ -25,7 +25,7 @@ As in bagging, rows left out of a tree's bootstrap sample are used to compute th
 
 ## Split criterion
 
-Entropy and information gain, as in [ID3](id3.md):
+Entropy and information gain, as in [ID3](../id3/README.md):
 
 $$H(S) = -\sum_c p_c \log_2 p_c, \qquad IG(S, A) = H(S) - \sum_{v} \frac{|S_v|}{|S|} H(S_v)$$
 
