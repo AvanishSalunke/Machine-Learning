@@ -1,53 +1,81 @@
 # SVM with Gaussian (RBF) Kernel
 
-Files: [svmkernel.py](svmkernel.py) and [libsvmkernel.py](libsvmkernel.py)
+Files in this folder:
 
-## Idea
+- [svmkernel.py](svmkernel.py): a kernel SVM trained with gradient descent on the hinge loss, with numpy.
+- [libsvmkernel.py](libsvmkernel.py): library version with scikit-learn's `SVC(kernel="rbf")`.
 
-A support vector machine separates two classes with the boundary that has the widest possible margin. Labels are written as $y \in \{-1, +1\}$ and the decision function is
+## In simple words
 
-$$f(\mathbf{x}) = \mathrm{sign}\big(\mathbf{w}^T \mathbf{x} + b\big)$$
+The Gaussian kernel (also called RBF, "radial basis function") measures **how close** two samples are. Two samples that are almost the same get a similarity near 1. Two samples that are far apart get a similarity near 0. Like a bell-shaped hill around each training sample.
 
-Points that lie on or inside the margin ($y f(\mathbf{x}) \le 1$) are the support vectors. Only they decide where the boundary goes.
+The SVM then decides a new sample's class by letting every training sample "vote" with a strength that depends on how close it is. Samples nearby shout loudly, samples far away whisper. This allows very flexible, curvy boundaries, including islands of one class inside another.
 
-## Soft margin and hinge loss
+## Key words
 
-Real data is rarely perfectly separable, so the soft margin SVM allows some points to break the margin and pays a penalty for it. The penalty is the hinge loss:
+- **Kernel** $K(\mathbf{x}, \mathbf{z})$: a similarity score between two samples.
+- **$\sigma$ (sigma)**: the width of the bell. A small $\sigma$ means only very close samples count, which gives a wiggly boundary. A big $\sigma$ means a wide influence and a smoother boundary.
+- **$C$**: how strongly samples that break the margin are punished.
+- **Hinge loss**: the penalty for being inside the margin or on the wrong side.
+- **Support vectors**: samples with margin $\le 1$.
 
-$$\ell(y, f) = \max(0, \; 1 - y f(\mathbf{x}))$$
+## The maths, step by step
 
-The parameter $C$ controls the trade-off: large $C$ punishes violations strongly, small $C$ prefers a wider margin.
-
-## The kernel trick
-
-A kernel computes an inner product in a higher dimensional space without going there. The Gaussian (RBF) kernel is
+**1. The Gaussian kernel:**
 
 $$K(\mathbf{x}, \mathbf{z}) = \exp\!\left( -\frac{\lVert \mathbf{x} - \mathbf{z} \rVert^2}{2\sigma^2} \right)$$
 
-It is close to 1 for nearby points and close to 0 for distant ones, and $\sigma$ sets how far the influence of a point reaches. With a kernel, the decision function is written as a combination of kernel values to the training points:
+The top part is the squared distance between the samples. Same sample: distance 0, so $K = e^0 = 1$. Far away: the exponent is a large negative number, so $K \approx 0$. In scikit-learn the same thing is written with $\gamma = \dfrac{1}{2\sigma^2}$.
 
-$$f(\mathbf{x}) = \sum_{j=1}^{m} w_j \, K(\mathbf{x}_j, \mathbf{x}) + b$$
+**2. The decision function.** Every training sample contributes a similarity, weighted by $w_j$:
 
-## Training in the code
+$$f(\mathbf{x}) = \sum_{j=1}^{m} w_j\, K(\mathbf{x}_j, \mathbf{x}) + b$$
 
-The code builds the kernel matrix $K$ ($m \times m$ for training, test rows by training rows for testing) and then trains by sub-gradient descent on
+Predict $+1$ if $f(\mathbf{x}) \ge 0$, else $-1$.
 
-$$J = \frac{1}{2} \sum_j w_j^2 + C \cdot \frac{1}{m} \sum_{i=1}^{m} \max\big(0, \; 1 - y_i f(\mathbf{x}_i)\big)$$
+**3. The loss.** The same soft margin loss as in [svm-polynomial](../svm-polynomial/README.md) with the hinge loss averaged over the samples:
 
-Let $B$ be the set of "bad" points with $y_i f(\mathbf{x}_i) < 1$. The sub-gradients are
+$$J = \frac{1}{2} \sum_{j} w_j^2 + C \cdot \frac{1}{m} \sum_{i=1}^{m} \max\big(0,\; 1 - y_i f(\mathbf{x}_i)\big)$$
 
-$$\frac{\partial J}{\partial \mathbf{w}} = \mathbf{w} - \frac{C}{m} \sum_{i \in B} y_i \, K_{i,:}, \qquad \frac{\partial J}{\partial b} = -\frac{C}{m} \sum_{i \in B} y_i$$
+**4. The gradient**, where $B$ is the set of samples with $y_i f(\mathbf{x}_i) < 1$:
 
-The learning rate decays over time: $\alpha_t = \alpha_0 / (1 + d \cdot t)$.
+$$\frac{\partial J}{\partial \mathbf{w}} = \mathbf{w} - \frac{C}{m} \sum_{i \in B} y_i\, \mathbf{K}_{i,:}, \qquad \frac{\partial J}{\partial b} = -\frac{C}{m} \sum_{i \in B} y_i$$
 
-Settings: $\sigma = 3$, $C = 10$, $\alpha_0 = 0.01$, decay $d = 0.01$, 1000 epochs. After training, points with margin $\le 1$ are reported as support vectors. A test point is classified as $+1$ if its score is $\ge 0$.
+**5. The update with a shrinking step:**
 
-## Data
+$$\alpha_t = \frac{\alpha_0}{1 + d_{decay} \cdot t}, \qquad \mathbf{w} \leftarrow \mathbf{w} - \alpha_t \frac{\partial J}{\partial \mathbf{w}}, \qquad b \leftarrow b - \alpha_t \frac{\partial J}{\partial b}$$
 
-`heart_cleveland_upload.csv`, predicting the `condition` column (0 becomes $-1$, 1 stays $+1$). Features are standardised with `StandardScaler`, using an 80/20 split with `random_state=42`. The code prints the number of support vectors, accuracy, precision, recall, F1 and the confusion matrix, and plots the loss.
+## A small worked example
+
+Two samples $\mathbf{x} = (0, 0)$ and $\mathbf{z} = (1, 1)$. The squared distance is $1 + 1 = 2$.
+
+- With $\sigma = 1$: $K = \exp(-2 / 2) = e^{-1} = 0.368$
+- With $\sigma = 3$: $K = \exp(-2 / 18) = 0.895$
+
+With the wide bell ($\sigma = 3$) these two samples are seen as very similar. With the narrow bell ($\sigma = 1$) they are only slightly similar. This is why a small $\sigma$ gives a boundary that hugs the data and can overfit, and a large $\sigma$ behaves almost like a smooth, simple boundary.
+
+## How the code works
+
+1. **Load** `../datasets/heart_cleveland_upload.csv`; the target `condition` becomes $-1$ or $+1$. **Split** 80/20 with `random_state=42` and **standardise** the features (important here, because the kernel uses distances).
+2. **Kernel matrices** with two loops: `K_train` is $m \times m$, and `K_test` is test rows $\times$ $m$.
+3. **Train** with gradient descent as described above. Every 100 epochs it prints the loss and how many samples are "bad".
+4. **Support vectors.** Samples with margin $\le 1$ are printed and counted.
+5. **Predict** with the sign of `K_test @ w + b`. Report accuracy, precision, recall, F1 and the confusion matrix, and plot the loss.
+
+Settings: $\sigma = 3$, $C = 10$, $\alpha_0 = 0.01$, decay 0.01, 1000 epochs.
 
 ## Library version
 
-`libsvmkernel.py` uses scikit-learn's `SVC(kernel="rbf")`. SVC solves the dual problem exactly instead of using gradient descent. To match the code version, `gamma = 1 / (2 sigma^2)` and `C` is divided by the number of training rows, because the code averages the hinge loss over the rows while SVC sums it.
+[libsvmkernel.py](libsvmkernel.py) uses `SVC(kernel="rbf", C=C / rows, gamma=1 / (2 * sigma ** 2))`. It does not use gradient descent: it solves the dual problem exactly. So that it matches the numpy code, $\gamma$ is computed from $\sigma$, and $C$ is divided by the number of training rows (the numpy loss averages the hinge loss, while scikit-learn sums it). The results should be close, but not identical.
 
-See also [svm-polynomial.md](../svm-polynomial/README.md) and [svm-linear.md](../svm-linear/README.md).
+## Strengths and weaknesses
+
+- Very flexible, and works well on many problems with few features.
+- Two settings ($C$ and $\sigma$) must be chosen well. Too much flexibility overfits, too little underfits.
+- The kernel matrix is $m \times m$, so training is slow on large data.
+- Needs scaled features.
+
+## Things to try
+
+- Change $\sigma$ to 0.5, 1 and 10. Look at accuracy and the number of support vectors.
+- Compare with the [linear SVM](../svm-linear/README.md) on the same data.
