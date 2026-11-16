@@ -3,7 +3,7 @@ import numpy as np
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import StandardScaler, LabelEncoder
 
-data = pd.read_csv("mushrooms.csv")
+data = pd.read_csv("../datasets/mushrooms.csv")
 target = "class"
 
 print(data.shape)

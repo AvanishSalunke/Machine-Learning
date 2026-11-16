@@ -1,6 +1,6 @@
 # Data Preprocessing
 
-File: [preprocessinggeneral.py](../preprocessinggeneral.py)
+File: [preprocessinggeneral.py](preprocessinggeneral.py)
 
 A general template for preparing a tabular dataset before training a model. Most scripts in this repository repeat a trimmed version of these steps at the top.
 
