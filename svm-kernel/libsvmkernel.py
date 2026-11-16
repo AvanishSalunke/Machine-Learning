@@ -6,7 +6,7 @@ from sklearn.preprocessing import StandardScaler
 from sklearn.svm import SVC
 from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score, confusion_matrix
 
-data = pd.read_csv("heart_cleveland_upload.csv")
+data = pd.read_csv("../datasets/heart_cleveland_upload.csv")
 X = data.drop("condition", axis=1)
 y = data["condition"].values
 y = np.where(y == 0, -1, 1)
