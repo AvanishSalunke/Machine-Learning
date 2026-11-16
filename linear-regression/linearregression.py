@@ -6,7 +6,7 @@ from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import StandardScaler
 from sklearn.metrics import mean_absolute_error, mean_squared_error, r2_score
 
-data = pd.read_csv("electricity_cost_dataset.csv")
+data = pd.read_csv("../datasets/electricity_cost_dataset.csv")
 X = data.drop("electricity cost", axis=1)
 y = data["electricity cost"].values
 X = pd.get_dummies(X, drop_first=True)

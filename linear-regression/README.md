@@ -1,6 +1,6 @@
 # Linear Regression
 
-Files: [linearregression.py](../linearregression.py) and [liblinearregression.py](../liblinearregression.py)
+Files: [linearregression.py](linearregression.py) and [liblinearregression.py](liblinearregression.py)
 
 ## Idea
 
