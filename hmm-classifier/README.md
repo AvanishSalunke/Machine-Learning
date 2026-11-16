@@ -1,36 +1,82 @@
 # HMM Classifier
 
-Files: [hmmclassifier.py](hmmclassifier.py), [datasethmmclassifier.py](datasethmmclassifier.py) and [libhmmclassifier.py](libhmmclassifier.py)
+Files in this folder:
 
-## Idea
+- [hmmclassifier.py](hmmclassifier.py): an HMM classifier on the mushroom data, step by step with numpy.
+- [datasethmmclassifier.py](datasethmmclassifier.py): a more general version that reads `dataset.csv` and handles any number of classes.
+- [libhmmclassifier.py](libhmmclassifier.py): library version with `hmmlearn`.
 
-Hidden Markov models can be used as classifiers for sequences. Train one HMM per class, using only the training sequences of that class. To classify a new sequence, ask each model how likely it is to have produced the sequence and pick the best class, weighting by the class prior. This is Bayes' rule with the HMM as the class conditional model:
+## In simple words
 
-$$\hat{c} = \arg\max_{c} \; P(c) \, P(O \mid \lambda_c)$$
+Imagine you know two music styles, jazz and rock. You listen to many jazz pieces and build a "jazz machine" that captures how jazz sequences of notes tend to look. You do the same with rock. When a new piece arrives, you ask both machines: "How likely is it that you would make this piece?" The machine that finds the piece more likely gives you the answer.
 
-Working with logarithms avoids numerical underflow:
+That is the HMM classifier. For each class we train one [hidden Markov model](../hmm-forward-backward/README.md) on the sequences of that class. To classify a new sequence, we compute its probability under each model and pick the class with the highest (prior-weighted) probability.
 
-$$\hat{c} = \arg\max_{c} \; \Big[ \ln P(c) + \ln P(O \mid \lambda_c) \Big]$$
+In this repository a mushroom is a **sequence of attributes**: cap shape, then cap surface, then cap colour, and so on, for 22 steps. Each attribute value is a symbol.
 
-## Ingredients
+## Key words
 
-- **Training each class model** uses the [Baum-Welch algorithm](../hmm-baum-welch/README.md) on all sequences of the class. With several sequences, the expected counts $\gamma$ and $\xi$ are summed over all of them before the update.
-- **Scoring a sequence** uses the forward algorithm from [hmm-forward-backward.md](../hmm-forward-backward/README.md) to get $P(O \mid \lambda_c)$.
-- **The prior** is the class frequency in the training set, $P(c) = N_c / N$.
+- **Class-conditional model** $\lambda_c$: the HMM trained only on sequences of class $c$.
+- **Prior** $P(c)$: how common the class is in the training data.
+- **Log probability**: we add logarithms instead of multiplying tiny probabilities.
+- **Multiple sequences**: the model is trained on many sequences at once, not a single long one.
 
-## What the code does
+## The maths, step by step
 
-Every mushroom is treated as a sequence: its attribute values in column order, each value being a symbol (an integer code).
+**1. The decision rule** is Bayes' rule with an HMM for each class:
 
-- Data: `mushrooms.csv` with `?` replaced by the mode. Edible = 0, poisonous = 1. 80/20 split with `random_state=42`.
-- For each class, an HMM with 3 hidden states is created with random starting $\pi$, $A$, $B$ (seed 42) and trained for 20 Baum-Welch epochs on all sequences of that class at once. The code runs the forward and backward passes for all sequences together with array operations.
-- After each update, a tiny constant is added to $B$ and the rows are renormalised, so no emission probability becomes exactly zero.
-- The average negative log likelihood per epoch is stored for both classes and plotted.
-- Each test sequence goes through the forward pass of both models. The score of a class is $\ln P(O \mid \lambda_c) + \ln P(c)$ and the larger one wins.
-- It prints accuracy, precision, recall, F1 and the confusion matrix.
+$$\hat{c} = \arg\max_{c}\; P(c)\; P(O \mid \lambda_c)$$
 
-[datasethmmclassifier.py](datasethmmclassifier.py) is the general version. It reads `dataset.csv` and uses the column named `class` as the target, converts all columns to integer codes, and trains one HMM for each class found. For more than two classes it reports macro averaged precision, recall and F1. `dataset.csv` is not included in this repository.
+$P(O \mid \lambda_c)$ is the probability that the model of class $c$ produces the observation sequence $O$. It is found with the **forward algorithm** (see [forward-backward](../hmm-forward-backward/README.md)).
+
+**2. Use logarithms** to avoid numbers too small for the computer:
+
+$$\hat{c} = \arg\max_{c}\; \Big[ \ln P(c) + \ln P(O \mid \lambda_c) \Big]$$
+
+**3. The prior** from the training labels, where $N_c$ rows have class $c$:
+
+$$P(c) = \frac{N_c}{N}$$
+
+**4. Training one model** uses [Baum-Welch](../hmm-baum-welch/README.md). With many training sequences $O^{(1)}, \dots, O^{(n)}$ of a class, the E-step is done for every sequence and the expected counts are **added up** before the M-step:
+
+$$\hat{A}_{ij} = \frac{\sum_{s=1}^{n} \sum_{t=1}^{T-1} \xi^{(s)}_t(i, j)}{\sum_{s=1}^{n} \sum_{t=1}^{T-1} \gamma^{(s)}_t(i)}, \qquad \hat{\pi}_i = \frac{1}{n} \sum_{s=1}^{n} \gamma^{(s)}_1(i)$$
+
+$$\hat{B}_j(k) = \frac{\sum_{s} \sum_{t:\, o^{(s)}_t = k} \gamma^{(s)}_t(j)}{\sum_{s} \sum_{t} \gamma^{(s)}_t(j)}$$
+
+**5. Safety for zero probabilities.** If a symbol never appears under a model, its emission probability could drop to exactly 0, and any test sequence containing it would get probability 0. So after every update a tiny number is added to $B$ and the rows are normalised again.
+
+## A small worked example
+
+Suppose that for one test mushroom the two models give:
+
+- edible model: $\ln P(O \mid \lambda_e) = -30.2$, and the prior $P(e) = 0.52$, so $\ln P(e) = -0.65$. Score: $-30.85$.
+- poisonous model: $\ln P(O \mid \lambda_p) = -35.8$, and the prior $P(p) = 0.48$, so $\ln P(p) = -0.73$. Score: $-36.53$.
+
+The edible score is larger (closer to zero), so the mushroom is classified as **edible**. The difference of about 5.7 in log scale means the edible model finds this sequence about 300 times more likely.
+
+## How the code works
+
+**[hmmclassifier.py](hmmclassifier.py)**
+
+1. **Load** `../datasets/mushrooms.csv`, replace `?` with the most common value, and convert every attribute value to an integer code, which is the symbol. Each mushroom is one sequence of 22 symbols. Edible = 0, poisonous = 1. **Split** 80/20 with `random_state=42`.
+2. **For each class** (seed 42): take the training sequences of that class and create an HMM with 3 hidden states and random $\pi$, $A$, $B$.
+3. **Train for 20 Baum-Welch epochs.** The forward and backward passes are done for all sequences at once with array operations. After each update a tiny number is added to $B$ and rows are renormalised. The average negative log likelihood of each epoch is stored for both classes and plotted.
+4. **Classify.** For each test sequence, run the forward algorithm with each class model, take the logarithm, and add the log prior. The larger score wins.
+5. **Report** accuracy, precision, recall, F1 and the confusion matrix.
+
+**[datasethmmclassifier.py](datasethmmclassifier.py)** is the general version. It reads `dataset.csv`, uses the column named `class` as the target, turns every column into integer symbols, and trains one HMM for each class it finds. With more than two classes it reports macro-averaged precision, recall and F1. The file `dataset.csv` is not included in this repository, so add your own to run it.
 
 ## Library version
 
-[libhmmclassifier.py](libhmmclassifier.py) trains one `hmmlearn.hmm.CategoricalHMM` per class (3 states, 20 iterations, trained on all sequences of the class with the `lengths` argument) and scores each test sequence with `model.score`, adding the log prior.
+[libhmmclassifier.py](libhmmclassifier.py) trains one `hmmlearn.hmm.CategoricalHMM` per class (3 states, 20 rounds, using the `lengths` argument so that the library knows where each sequence ends) and scores each test sequence with `model.score`, adding the log prior.
+
+## Strengths and weaknesses
+
+- A natural fit when the **order** of the values matters, like speech, gestures or DNA.
+- For the mushroom data the order of attributes is arbitrary, so this is mainly a demonstration of the method. A model that ignores order, like [naive Bayes](../naive-bayes/README.md) or a [tree](../id3/README.md), may work as well or better.
+- You must choose the number of hidden states, and training depends on the random start.
+
+## Things to try
+
+- Change the number of hidden states from 3 to 2 or 5.
+- Compare accuracy with the [naive Bayes](../naive-bayes/README.md) and [ID3](../id3/README.md) folders.
