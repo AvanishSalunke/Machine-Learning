@@ -1,6 +1,6 @@
 # HMM: Forward-Backward Algorithm
 
-Files: [hmmfb.py](../hmmfb.py), [datasethmmfb.py](../datasethmmfb.py) and [libhmmfb.py](../libhmmfb.py)
+Files: [hmmfb.py](hmmfb.py), [datasethmmfb.py](datasethmmfb.py) and [libhmmfb.py](libhmmfb.py)
 
 ## Hidden Markov Model basics
 
@@ -40,11 +40,11 @@ $$\gamma_t(j) = P(q_t = j \mid O, \lambda) = \frac{\alpha_t(j) \, \beta_t(j)}{P(
 
 ## What the code does
 
-[hmmfb.py](../hmmfb.py) uses a small example with 2 states and 3 possible observations, $\pi = (0.6, 0.4)$, a $2 \times 2$ matrix $A$ and a $2 \times 3$ matrix $B$, and the observation sequence `[1, 2, 0, 1]`. It prints $\alpha$, $\beta$, the forward and backward probabilities and $\gamma$.
+[hmmfb.py](hmmfb.py) uses a small example with 2 states and 3 possible observations, $\pi = (0.6, 0.4)$, a $2 \times 2$ matrix $A$ and a $2 \times 3$ matrix $B$, and the observation sequence `[1, 2, 0, 1]`. It prints $\alpha$, $\beta$, the forward and backward probabilities and $\gamma$.
 
 The variable `from_start` controls where the sequence begins. If it is 1, the code first applies one transition to $\pi$ (the first observation is emitted after a step, $\pi A$). If it is 0, the first observation is emitted directly from $\pi$.
 
-[datasethmmfb.py](../datasethmmfb.py) runs the same algorithm on parameters estimated from data. It reads `dataset.csv` with a `state` column and an `obs` column, and counts with add-one smoothing:
+[datasethmmfb.py](datasethmmfb.py) runs the same algorithm on parameters estimated from data. It reads `dataset.csv` with a `state` column and an `obs` column, and counts with add-one smoothing:
 
 $$\pi_i = \frac{\text{count}(q_1 = i) + 1}{\ldots}, \qquad A_{ij} = \frac{\text{count}(i \to j) + 1}{\sum_{j'} \big(\text{count}(i \to j') + 1\big)}, \qquad B_j(k) = \frac{\text{count}(j, k) + 1}{\sum_{k'} \big(\text{count}(j, k') + 1\big)}$$
 
@@ -52,4 +52,4 @@ It then evaluates the first `n = 10` observations. Note that `dataset.csv` is no
 
 ## Library version
 
-[libhmmfb.py](../libhmmfb.py) uses `hmmlearn.hmm.CategoricalHMM` with the same $\pi$, $A$ and $B$. `model.score` gives the log of the forward probability and `predict_proba` gives $\gamma$.
+[libhmmfb.py](libhmmfb.py) uses `hmmlearn.hmm.CategoricalHMM` with the same $\pi$, $A$ and $B$. `model.score` gives the log of the forward probability and `predict_proba` gives $\gamma$.
