@@ -1,6 +1,6 @@
 # Gini Index
 
-File: [giniindex.py](../giniindex.py). The same criterion is also one of the three in [id3_3.py](../id3_3.py).
+File: [giniindex.py](giniindex.py). The same criterion is also one of the three in [id3_3.py](../id3/id3_3.py).
 
 ## Idea
 
@@ -22,7 +22,7 @@ Unlike information gain, here a lower value is better. The code picks the featur
 
 ## What the code does
 
-The tree builder is the same as in [ID3](id3.md): multi-way splits on categorical features, every feature used at most once on a path, stopping when the node is pure or no features remain, majority class as the leaf label, and if-then rules printed at the end.
+The tree builder is the same as in [ID3](../id3/README.md): multi-way splits on categorical features, every feature used at most once on a path, stopping when the node is pure or no features remain, majority class as the leaf label, and if-then rules printed at the end.
 
 Differences from the entropy version: the node value printed is the Gini impurity, the best score starts at 2 and the code keeps the feature with the lowest weighted Gini.
 
@@ -30,4 +30,4 @@ Data is `mushrooms.csv` with `?` replaced by the mode, edible = 0 and poisonous 
 
 ## Library version
 
-There is no separate library file for this one. scikit-learn's `DecisionTreeClassifier(criterion="gini")` would be the equivalent, and [id3tree.py](../id3tree.py) shows how the library tree is used with the entropy criterion. Note that scikit-learn builds binary splits while this code makes multi-way splits.
+There is no separate library file for this one. scikit-learn's `DecisionTreeClassifier(criterion="gini")` would be the equivalent, and [id3tree.py](../id3/id3tree.py) shows how the library tree is used with the entropy criterion. Note that scikit-learn builds binary splits while this code makes multi-way splits.
