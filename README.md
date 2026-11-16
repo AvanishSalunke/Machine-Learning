@@ -8,7 +8,6 @@ A collection of machine learning algorithms with clean code, library versions to
 - [How the repository is organised](#how-the-repository-is-organised)
 - [Algorithms](#algorithms)
 - [Datasets](#datasets)
-- [Roadmap](#roadmap)
 - [Contributing](#contributing)
 - [License](#license)
 
@@ -74,7 +73,6 @@ Machine-Learning/
   id3/
     ...
   README.md              this file
-  ROADMAP.md             what is coming next
   CONTRIBUTING.md        how to help
   LICENSE
   requirements.txt
@@ -146,10 +144,6 @@ All datasets are in the [datasets](datasets) folder.
 - [mushrooms.csv](datasets/mushrooms.csv): used by most of the classification algorithms.
 
 The `dataset` versions of the HMM scripts read a file called `dataset.csv`. It is not included, so add your own file with a `state` and an `obs` column (or a `class` column for the classifier) before running them.
-
-## Roadmap
-
-Many more algorithms are planned: maths basics, more tree methods, rule-based learning, evaluation tools, clustering, CNNs and more. See the [roadmap](ROADMAP.md) for the full list.
 
 ## Contributing
 

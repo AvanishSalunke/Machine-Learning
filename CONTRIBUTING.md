@@ -6,7 +6,7 @@ Thanks for wanting to help. This project is a collection of machine learning alg
 
 - Fix a bug or a wrong formula in the code or in a README.
 - Make an explanation simpler or clearer.
-- Add one of the algorithms from the [roadmap](ROADMAP.md).
+- Add a new algorithm that is not in the repository yet.
 - Add a missing library version for an algorithm that has only one.
 
 If you plan something big, open an issue first so that nobody works on the same thing twice.
@@ -88,7 +88,6 @@ Write formulas in LaTeX between dollar signs, because GitHub shows them nicely. 
 - The scripts run without errors from inside their folder.
 - The folder has the README, and the formulas in it match the code.
 - New algorithms are added to the list in the main README.
-- If your algorithm was on the roadmap, tick it off in [ROADMAP.md](ROADMAP.md).
 
 ## Reporting problems
 
