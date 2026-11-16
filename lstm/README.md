@@ -1,6 +1,6 @@
 # Long Short-Term Memory (LSTM)
 
-Files: [lstm.py](../lstm.py) and [liblstm.py](../liblstm.py)
+Files: [lstm.py](lstm.py) and [liblstm.py](liblstm.py)
 
 ## Idea
 
@@ -26,7 +26,7 @@ The hidden state is a filtered view of the cell state:
 
 $$\mathbf{h}_t = \mathbf{o}_t \odot \tanh(\mathbf{c}_t)$$
 
-Final output after the last step, with the log loss as in the [RNN](rnn.md):
+Final output after the last step, with the log loss as in the [RNN](../rnn/README.md):
 
 $$\hat{y} = \sigma\big(\mathbf{w}_o^T \mathbf{h}_T + b_o\big)$$
 

@@ -5,7 +5,7 @@ import matplotlib.pyplot as plt
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score, confusion_matrix
 
-data = pd.read_csv("mushrooms.csv")
+data = pd.read_csv("../datasets/mushrooms.csv")
 data = data.replace("?", np.nan)
 data = data.fillna(data.mode().iloc[0])
 X = data.drop("class", axis=1)
