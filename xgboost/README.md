@@ -1,10 +1,10 @@
 # XGBoost
 
-Files: [xgboost.py](../xgboost.py) and [libxgboost.py](../libxgboost.py)
+Files: [xgboost.py](xgboost.py) and [libxgboost.py](libxgboost.py)
 
 ## Idea
 
-XGBoost (extreme gradient boosting) is a regularised version of [gradient boosting](gradient-boosting.md). Where plain gradient boosting uses only the first derivative of the loss, XGBoost uses a second order Taylor approximation, so it knows both the slope and the curvature. It also adds penalties on the size of the trees.
+XGBoost (extreme gradient boosting) is a regularised version of [gradient boosting](../gradient-boosting/README.md). Where plain gradient boosting uses only the first derivative of the loss, XGBoost uses a second order Taylor approximation, so it knows both the slope and the curvature. It also adds penalties on the size of the trees.
 
 ## Objective
 
