@@ -1,6 +1,6 @@
 # Linear SVM
 
-Files: [libsvmlinear.py](../libsvmlinear.py) (library version) and [svmlinear.py](../svmlinear.py) (currently empty)
+Files: [libsvmlinear.py](libsvmlinear.py) (library version) and [svmlinear.py](svmlinear.py) (currently empty)
 
 ## Idea
 
@@ -28,10 +28,10 @@ Large $C$ means few violations are accepted, small $C$ means a wider margin with
 
 ## Dual form
 
-Solving the problem through its dual gives $\mathbf{w} = \sum_i \alpha_i y_i \mathbf{x}_i$ with $0 \le \alpha_i \le C$, and only support vectors have $\alpha_i > 0$. The data enters only through dot products $\mathbf{x}_i^T \mathbf{x}_j$, which is what makes kernels possible. See [svm-kernel.md](svm-kernel.md) and [svm-polynomial.md](svm-polynomial.md).
+Solving the problem through its dual gives $\mathbf{w} = \sum_i \alpha_i y_i \mathbf{x}_i$ with $0 \le \alpha_i \le C$, and only support vectors have $\alpha_i > 0$. The data enters only through dot products $\mathbf{x}_i^T \mathbf{x}_j$, which is what makes kernels possible. See [svm-kernel.md](../svm-kernel/README.md) and [svm-polynomial.md](../svm-polynomial/README.md).
 
 ## What the code does
 
-[libsvmlinear.py](../libsvmlinear.py) uses scikit-learn's `SVC(kernel="linear")` on `heart_cleveland_upload.csv`, predicting `condition` (0 becomes $-1$, 1 stays $+1$) with standardised features and an 80/20 split with `random_state=42`. `C` is set to `10 / number_of_training_rows` so that it matches the averaged hinge loss used in the kernel scripts. It prints $\mathbf{w}$, $b$, the support vectors and their count, and the usual metrics.
+[libsvmlinear.py](libsvmlinear.py) uses scikit-learn's `SVC(kernel="linear")` on `heart_cleveland_upload.csv`, predicting `condition` (0 becomes $-1$, 1 stays $+1$) with standardised features and an 80/20 split with `random_state=42`. `C` is set to `10 / number_of_training_rows` so that it matches the averaged hinge loss used in the kernel scripts. It prints $\mathbf{w}$, $b$, the support vectors and their count, and the usual metrics.
 
-[svmlinear.py](../svmlinear.py) is empty at the moment. The linear case of the gradient descent implementation is available in [svmpolynomial.py](../svmpolynomial.py) with `degree = 1`, which uses a linear kernel (see [svm-polynomial.md](svm-polynomial.md)).
+[svmlinear.py](svmlinear.py) is empty at the moment. The linear case of the gradient descent implementation is available in [svmpolynomial.py](../svm-polynomial/svmpolynomial.py) with `degree = 1`, which uses a linear kernel (see [svm-polynomial.md](../svm-polynomial/README.md)).
