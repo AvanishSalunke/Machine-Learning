@@ -1,14 +1,14 @@
 # HMM: Baum-Welch Algorithm
 
-Files: [hmmbaumwelch.py](../hmmbaumwelch.py), [datasethmmbaumwelch.py](../datasethmmbaumwelch.py) and [libhmmbaumwelch.py](../libhmmbaumwelch.py)
+Files: [hmmbaumwelch.py](hmmbaumwelch.py), [datasethmmbaumwelch.py](datasethmmbaumwelch.py) and [libhmmbaumwelch.py](libhmmbaumwelch.py)
 
 ## The problem
 
-Given only an observation sequence $O$ and the number of hidden states, learn the model $\lambda = (\pi, A, B)$ that makes the sequence most likely. This is the learning problem for [hidden Markov models](hmm-forward-backward.md). The states are hidden, so the parameters cannot just be counted. Baum-Welch is the Expectation-Maximisation (EM) algorithm for HMMs: it alternates between guessing the hidden states softly and re-estimating the parameters, and each round never decreases $P(O \mid \lambda)$.
+Given only an observation sequence $O$ and the number of hidden states, learn the model $\lambda = (\pi, A, B)$ that makes the sequence most likely. This is the learning problem for [hidden Markov models](../hmm-forward-backward/README.md). The states are hidden, so the parameters cannot just be counted. Baum-Welch is the Expectation-Maximisation (EM) algorithm for HMMs: it alternates between guessing the hidden states softly and re-estimating the parameters, and each round never decreases $P(O \mid \lambda)$.
 
 ## E-step
 
-Run the forward and backward passes ($\alpha$ and $\beta$, see [hmm-forward-backward.md](hmm-forward-backward.md)) with the current parameters. Then compute two quantities.
+Run the forward and backward passes ($\alpha$ and $\beta$, see [hmm-forward-backward.md](../hmm-forward-backward/README.md)) with the current parameters. Then compute two quantities.
 
 The probability of being in state $i$ at time $t$:
 
@@ -40,13 +40,13 @@ which should go down at every epoch.
 
 ## What the code does
 
-[hmmbaumwelch.py](../hmmbaumwelch.py) learns a model with 2 hidden states and 3 symbols from the sequence `[0, 1, 2, 0, 1, 1, 2, 0, 0, 1, 2, 1, 0, 2, 2, 0]`.
+[hmmbaumwelch.py](hmmbaumwelch.py) learns a model with 2 hidden states and 3 symbols from the sequence `[0, 1, 2, 0, 1, 1, 2, 0, 0, 1, 2, 1, 0, 2, 2, 0]`.
 
 - $\pi$, $A$ and $B$ start as random numbers (seed 42) normalised so each distribution sums to 1.
 - 50 epochs of E-step and M-step. The error is printed every 10 epochs and plotted, and the learned $\pi$, $A$ and $B$ are printed.
 
-[datasethmmbaumwelch.py](../datasethmmbaumwelch.py) does the same, but takes the observation sequence from the `obs` column of `dataset.csv` (the first 50 values) and works out the number of symbols from the data. `dataset.csv` is not included in this repository.
+[datasethmmbaumwelch.py](datasethmmbaumwelch.py) does the same, but takes the observation sequence from the `obs` column of `dataset.csv` (the first 50 values) and works out the number of symbols from the data. `dataset.csv` is not included in this repository.
 
 ## Library version
 
-[libhmmbaumwelch.py](../libhmmbaumwelch.py) uses `hmmlearn.hmm.CategoricalHMM` with the same random starting parameters and the same number of epochs. It calls `fit` for one EM iteration at a time (`n_iter=1`) so that the error can be recorded after every epoch with `-model.score(X)`.
+[libhmmbaumwelch.py](libhmmbaumwelch.py) uses `hmmlearn.hmm.CategoricalHMM` with the same random starting parameters and the same number of epochs. It calls `fit` for one EM iteration at a time (`n_iter=1`) so that the error can be recorded after every epoch with `-model.score(X)`.
