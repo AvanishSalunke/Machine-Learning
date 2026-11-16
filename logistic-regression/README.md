@@ -1,6 +1,6 @@
 # Logistic Regression
 
-Files: [logisticregression.py](../logisticregression.py) and [liblogisticregression.py](../liblogisticregression.py)
+Files: [logisticregression.py](logisticregression.py) and [liblogisticregression.py](liblogisticregression.py)
 
 ## Idea
 
