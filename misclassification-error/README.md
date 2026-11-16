@@ -1,6 +1,6 @@
 # Misclassification Error
 
-File: [misclassificationerror.py](../misclassificationerror.py). The same criterion is also one of the three in [id3_3.py](../id3_3.py).
+File: [misclassificationerror.py](misclassificationerror.py). The same criterion is also one of the three in [id3_3.py](../id3/id3_3.py).
 
 ## Idea
 
@@ -22,14 +22,14 @@ The code picks the feature with the smallest weighted error.
 
 ## How it compares with entropy and Gini
 
-Entropy and Gini are smooth curves, so they react to small improvements in class purity. Misclassification error is a straight line in the class proportion, so it is less sensitive: a split that makes a node purer without changing its majority class can show no improvement at all. Because of this it is rarely used for growing trees, but it is common for pruning and for reporting the final error. Comparing the three on the same data is the purpose of [id3_3.py](../id3_3.py).
+Entropy and Gini are smooth curves, so they react to small improvements in class purity. Misclassification error is a straight line in the class proportion, so it is less sensitive: a split that makes a node purer without changing its majority class can show no improvement at all. Because of this it is rarely used for growing trees, but it is common for pruning and for reporting the final error. Comparing the three on the same data is the purpose of [id3_3.py](../id3/id3_3.py).
 
 ## What the code does
 
-The tree builder is the same as in [ID3](id3.md): multi-way splits, each feature used once per path, stop when the node is pure or no features remain, majority class as the leaf, and rules printed at the end. The node value printed is the error, the best score starts at 2 and the lowest weighted error wins.
+The tree builder is the same as in [ID3](../id3/README.md): multi-way splits, each feature used once per path, stop when the node is pure or no features remain, majority class as the leaf, and rules printed at the end. The node value printed is the error, the best score starts at 2 and the lowest weighted error wins.
 
 Data is `mushrooms.csv` with `?` replaced by the mode, edible = 0 and poisonous = 1, split 80/20 with `random_state=42`. It prints accuracy, precision, recall, F1, the confusion matrix and the number of leaves.
 
 ## Library version
 
-There is no library file for this one, because scikit-learn does not use misclassification error as a split criterion for classification trees. See [id3tree.py](../id3tree.py) for the library tree.
+There is no library file for this one, because scikit-learn does not use misclassification error as a split criterion for classification trees. See [id3tree.py](../id3/id3tree.py) for the library tree.
