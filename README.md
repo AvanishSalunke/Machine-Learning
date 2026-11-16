@@ -1,71 +1,160 @@
 # Machine Learning
 
-This repository collects common machine learning algorithms and their code. Most algorithms come in two versions:
+A collection of machine learning algorithms with clean code, library versions to compare against, and a plain-language README for every algorithm. Each README explains the idea in simple words, shows every formula, works through a small example with numbers, and describes exactly what the code does.
 
-- the main implementation, which follows the algorithm step by step with numpy
-- the library version, which does the same job with a library such as scikit-learn, Keras, XGBoost or hmmlearn, and has a `lib` prefix on the file name
+## Contents
 
-Every algorithm has its own folder with the code, the library version and a README. The README explains the idea, the formulas, and exactly what the code in this repository does, including the settings used.
+- [Quick start](#quick-start)
+- [How the repository is organised](#how-the-repository-is-organised)
+- [Algorithms](#algorithms)
+- [Datasets](#datasets)
+- [Roadmap](#roadmap)
+- [Contributing](#contributing)
+- [License](#license)
 
-## Regression and Classification Basics
+## Quick start
 
-Linear regression predicts a continuous value by fitting a weighted sum of the features. Logistic regression adds a sigmoid on top of it to predict class probabilities. Naive Bayes classifies with Bayes' theorem and the assumption that features are independent given the class.
+You need Python 3.9 or newer and git.
 
-- Linear regression: [linearregression.py](linear-regression/linearregression.py), [liblinearregression.py](linear-regression/liblinearregression.py), [notes](linear-regression/README.md)
-- Logistic regression: [logisticregression.py](logistic-regression/logisticregression.py), [liblogisticregression.py](logistic-regression/liblogisticregression.py), [notes](logistic-regression/README.md)
-- Naive Bayes: [naivebayes.py](naive-bayes/naivebayes.py), [libnaivebayes.py](naive-bayes/libnaivebayes.py), [notes](naive-bayes/README.md)
+1. Get the code:
 
-## Decision Trees
+```bash
+git clone https://github.com/AvanishSalunke/Machine-Learning.git
+cd Machine-Learning
+```
 
-A decision tree splits the data again and again on the feature that best separates the classes. The algorithms differ in how the best split is chosen.
+2. Make a virtual environment, so the packages stay separate from the rest of your system (optional but recommended):
 
-- ID3 (information gain): [id3.py](id3/id3.py), [id3_3.py](id3/id3_3.py), library version [id3tree.py](id3/id3tree.py), [notes](id3/README.md)
-- Gain ratio: [gainratio.py](gain-ratio/gainratio.py), [notes](gain-ratio/README.md)
-- Gini index: [giniindex.py](gini-index/giniindex.py), [notes](gini-index/README.md)
-- Misclassification error: [misclassificationerror.py](misclassification-error/misclassificationerror.py), [notes](misclassification-error/README.md)
+```bash
+python -m venv venv
+```
 
-## Support Vector Machines
+Activate it. On Windows:
 
-An SVM separates two classes with the widest possible margin. Kernels let it draw curved boundaries.
+```bash
+venv\Scripts\activate
+```
 
-- Linear SVM: [libsvmlinear.py](svm-linear/libsvmlinear.py), [notes](svm-linear/README.md)
-- Polynomial kernel: [svmpolynomial.py](svm-polynomial/svmpolynomial.py), [notes](svm-polynomial/README.md)
-- Gaussian (RBF) kernel: [svmkernel.py](svm-kernel/svmkernel.py), [libsvmkernel.py](svm-kernel/libsvmkernel.py), [notes](svm-kernel/README.md)
+On Mac or Linux:
 
-## Ensemble Methods
+```bash
+source venv/bin/activate
+```
 
-Ensembles combine many simple models into one strong model.
+3. Install the packages:
 
-- Bagging, which trains trees on bootstrap samples and takes a vote: [bagging.py](bagging/bagging.py), [libbagging.py](bagging/libbagging.py), [notes](bagging/README.md)
-- Random forest, which is bagging plus a random subset of features at each split: [randomforest.py](random-forest/randomforest.py), [librandomforest.py](random-forest/librandomforest.py), [notes](random-forest/README.md)
-- AdaBoost, which re-weights the samples that were classified wrongly: [adaboost.py](adaboost/adaboost.py), [libadaboost.py](adaboost/libadaboost.py), [notes](adaboost/README.md)
-- Gradient boosting, which fits each new tree to the errors of the current model: [gradientboosting.py](gradient-boosting/gradientboosting.py), [libgradientboosting.py](gradient-boosting/libgradientboosting.py), [notes](gradient-boosting/README.md)
-- XGBoost, a regularised gradient boosting that uses second order information: [xgboost.py](xgboost/xgboost.py), [libxgboost.py](xgboost/libxgboost.py), [notes](xgboost/README.md)
+```bash
+pip install -r requirements.txt
+```
 
-## Neural Networks
+4. Run an algorithm. Go into its folder first, because the scripts find the datasets with a relative path:
 
-- Feed-forward neural network, trained with backpropagation: [nn.py](neural-network/nn.py), [libnn.py](neural-network/libnn.py), [notes](neural-network/README.md)
-- RNN, a network with a hidden state that carries over from step to step: [rnn.py](rnn/rnn.py), [librnn.py](rnn/librnn.py), [notes](rnn/README.md)
-- LSTM, an RNN with gates and a cell state for long sequences: [lstm.py](lstm/lstm.py), [liblstm.py](lstm/liblstm.py), [notes](lstm/README.md)
-- GRU, a lighter gated RNN: [gru.py](gru/gru.py), [libgru.py](gru/libgru.py), [notes](gru/README.md)
+```bash
+cd linear-regression
+python linearregression.py
+```
 
-## Hidden Markov Models
+Many scripts draw a plot at the end, so a window may open. Close it to finish the script.
 
-An HMM models a system that moves between hidden states and only shows observations. Each of the four problems below has a plain version (small example), a dataset version (parameters estimated from data, with a `dataset` prefix) and a library version.
+## How the repository is organised
 
-- Forward-backward, the probability of an observation sequence: [hmmfb.py](hmm-forward-backward/hmmfb.py), [datasethmmfb.py](hmm-forward-backward/datasethmmfb.py), [libhmmfb.py](hmm-forward-backward/libhmmfb.py), [notes](hmm-forward-backward/README.md)
-- Viterbi, the most likely hidden state sequence: [hmmviterbi.py](hmm-viterbi/hmmviterbi.py), [datasethmmviterbi.py](hmm-viterbi/datasethmmviterbi.py), [libhmmviterbi.py](hmm-viterbi/libhmmviterbi.py), [notes](hmm-viterbi/README.md)
-- Baum-Welch, learning the model parameters from data: [hmmbaumwelch.py](hmm-baum-welch/hmmbaumwelch.py), [datasethmmbaumwelch.py](hmm-baum-welch/datasethmmbaumwelch.py), [libhmmbaumwelch.py](hmm-baum-welch/libhmmbaumwelch.py), [notes](hmm-baum-welch/README.md)
-- HMM classifier, one HMM per class: [hmmclassifier.py](hmm-classifier/hmmclassifier.py), [datasethmmclassifier.py](hmm-classifier/datasethmmclassifier.py), [libhmmclassifier.py](hmm-classifier/libhmmclassifier.py), [notes](hmm-classifier/README.md)
+Every algorithm has its own folder. Inside it you will find:
 
-## Preprocessing
+- the main code file, which follows the algorithm step by step with numpy
+- the library version, with a `lib` prefix on the name (for example `liblinearregression.py`), which does the same job with scikit-learn, Keras, XGBoost or hmmlearn
+- a `README.md` that teaches the algorithm
 
-[preprocessinggeneral.py](preprocessing/preprocessinggeneral.py) is a general template for cleaning, encoding, splitting and scaling a dataset. See [notes](preprocessing/README.md).
+```
+Machine-Learning/
+  datasets/              the CSV files used by the scripts
+  linear-regression/
+    linearregression.py
+    liblinearregression.py
+    README.md
+  id3/
+    ...
+  README.md              this file
+  ROADMAP.md             what is coming next
+  CONTRIBUTING.md        how to help
+  LICENSE
+  requirements.txt
+```
+
+A good way to study: read the README of an algorithm, run the main script, run the library version, and compare the two outputs.
+
+## Algorithms
+
+### Basics: regression and classification
+
+- [Linear regression](linear-regression/README.md): fits a straight line or plane to predict a number, using gradient descent.
+- [Logistic regression](logistic-regression/README.md): a linear model with a sigmoid on top that predicts the probability of a class.
+- [Naive Bayes](naive-bayes/README.md): classifies with Bayes' theorem and counted probabilities.
+
+### Decision trees
+
+A decision tree asks a chain of questions about the features. The folders below differ in how the best question is chosen.
+
+- [ID3](id3/README.md): picks the split with the biggest information gain (entropy). Includes a library version.
+- [Gain ratio](gain-ratio/README.md): information gain divided by split information, so features with many values are not favoured.
+- [Gini index](gini-index/README.md): picks the split with the lowest Gini impurity.
+- [Misclassification error](misclassification-error/README.md): picks the split with the lowest error rate.
+
+### Support vector machines
+
+An SVM separates two classes with the widest possible margin.
+
+- [Linear SVM](svm-linear/README.md): a straight boundary.
+- [Polynomial kernel SVM](svm-polynomial/README.md): curved boundaries from polynomial features.
+- [Gaussian kernel SVM](svm-kernel/README.md): flexible boundaries from the RBF kernel.
+
+### Ensembles
+
+Ensembles combine many simple models into a strong one.
+
+- [Bagging](bagging/README.md): trees on bootstrap samples, combined by voting.
+- [Random forest](random-forest/README.md): bagging plus a random choice of features at every split.
+- [AdaBoost](adaboost/README.md): models trained in turn, each focusing on the samples the last one got wrong.
+- [Gradient boosting](gradient-boosting/README.md): each new tree fixes the errors of the model so far.
+- [XGBoost](xgboost/README.md): gradient boosting with second order information and regularisation.
+
+### Neural networks
+
+- [Neural network](neural-network/README.md): layers of neurons trained with backpropagation.
+- [RNN](rnn/README.md): a network with memory for sequences.
+- [LSTM](lstm/README.md): an RNN with gates that keep information for a long time.
+- [GRU](gru/README.md): a lighter gated RNN.
+
+### Hidden Markov models
+
+An HMM has hidden states that we cannot see, and observations that we can. These folders also contain `dataset` versions that learn the model from data.
+
+- [Forward-backward](hmm-forward-backward/README.md): how likely is an observation sequence?
+- [Viterbi](hmm-viterbi/README.md): what is the most likely sequence of hidden states?
+- [Baum-Welch](hmm-baum-welch/README.md): learn the model from observations.
+- [HMM classifier](hmm-classifier/README.md): one HMM per class, to classify sequences.
+
+### Data preparation
+
+- [Preprocessing](preprocessing/README.md): cleaning, encoding, splitting and scaling a dataset.
 
 ## Datasets
 
-- [electricity_cost_dataset.csv](datasets/electricity_cost_dataset.csv), used for linear regression
-- [heart_cleveland_upload.csv](datasets/heart_cleveland_upload.csv), used for the SVMs
-- [mushrooms.csv](datasets/mushrooms.csv), used for most of the classification algorithms
+All datasets are in the [datasets](datasets) folder.
 
-The `dataset` prefixed HMM scripts read a file named `dataset.csv`, which is not included in the repository.
+- [electricity_cost_dataset.csv](datasets/electricity_cost_dataset.csv): used by linear regression.
+- [heart_cleveland_upload.csv](datasets/heart_cleveland_upload.csv): used by the SVMs.
+- [mushrooms.csv](datasets/mushrooms.csv): used by most of the classification algorithms.
+
+The `dataset` versions of the HMM scripts read a file called `dataset.csv`. It is not included, so add your own file with a `state` and an `obs` column (or a `class` column for the classifier) before running them.
+
+## Roadmap
+
+Many more algorithms are planned: maths basics, more tree methods, rule-based learning, evaluation tools, clustering, CNNs and more. See the [roadmap](ROADMAP.md) for the full list.
+
+## Contributing
+
+Pull requests are welcome. The [contributing guide](CONTRIBUTING.md) explains how to fork, branch and open a pull request, and how a new algorithm folder should look.
+
+## License
+
+This project is released under the [MIT License](LICENSE).
