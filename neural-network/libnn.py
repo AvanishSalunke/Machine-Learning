@@ -7,7 +7,7 @@ from sklearn.preprocessing import StandardScaler
 from sklearn.neural_network import MLPClassifier
 from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score, confusion_matrix
 
-data = pd.read_csv("mushrooms.csv")
+data = pd.read_csv("../datasets/mushrooms.csv")
 X = data.drop("class", axis=1)
 y = data["class"].map({"e": 0, "p": 1}).values
 X = pd.get_dummies(X, drop_first=True)

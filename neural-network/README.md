@@ -1,6 +1,6 @@
 # Neural Network (Multi-Layer Perceptron)
 
-Files: [nn.py](../nn.py) and [libnn.py](../libnn.py)
+Files: [nn.py](nn.py) and [libnn.py](libnn.py)
 
 ## Idea
 
