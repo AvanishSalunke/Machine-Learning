@@ -1,6 +1,6 @@
 # Bagging
 
-Files: [bagging.py](../bagging.py) and [libbagging.py](../libbagging.py)
+Files: [bagging.py](bagging.py) and [libbagging.py](libbagging.py)
 
 ## Idea
 
@@ -27,7 +27,7 @@ Every training row is out-of-bag for roughly a third of the trees. Collecting th
 ## What the code does
 
 - Data: `mushrooms.csv` with `?` replaced by the column mode. Edible = 0, poisonous = 1. 80/20 split with `random_state=42`.
-- 10 trees, random seed 42. Each tree is a full ID3 tree (entropy and information gain, multi-way splits, see [id3.md](id3.md)) grown on its bootstrap sample until the nodes are pure or no features are left.
+- 10 trees, random seed 42. Each tree is a full ID3 tree (entropy and information gain, multi-way splits, see [id3.md](../id3/README.md)) grown on its bootstrap sample until the nodes are pure or no features are left.
 - After each tree is built, the OOB rows are run through it and the votes are stored. The OOB error is printed.
 - On the test set the votes of the trees are accumulated one tree at a time, so the test error after 1, 2, ..., 10 trees can be plotted.
 
@@ -35,4 +35,4 @@ Every training row is out-of-bag for roughly a third of the trees. Collecting th
 
 `libbagging.py` uses scikit-learn's `BaggingClassifier` with `DecisionTreeClassifier(criterion="entropy")`, 10 estimators, `bootstrap=True` and `oob_score=True`. The categories are converted to integer codes first, and the trees are binary. Other behaviour (OOB error and test error per tree count) is the same.
 
-The next step beyond bagging is [random forest](random-forest.md), which also randomises the features.
+The next step beyond bagging is [random forest](../random-forest/README.md), which also randomises the features.
