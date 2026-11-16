@@ -1,6 +1,6 @@
 # Naive Bayes
 
-Files: [naivebayes.py](../naivebayes.py) and [libnaivebayes.py](../libnaivebayes.py)
+Files: [naivebayes.py](naivebayes.py) and [libnaivebayes.py](libnaivebayes.py)
 
 ## Idea
 
