@@ -1,42 +1,91 @@
 # Naive Bayes
 
-Files: [naivebayes.py](naivebayes.py) and [libnaivebayes.py](libnaivebayes.py)
+Files in this folder:
 
-## Idea
+- [naivebayes.py](naivebayes.py): probabilities counted and multiplied step by step with numpy
+- [libnaivebayes.py](libnaivebayes.py): the same with scikit-learn's `CategoricalNB`
 
-Naive Bayes is a probabilistic classifier built on Bayes' theorem. For a sample with features $x_1, \dots, x_n$ it asks which class $c$ is the most probable.
+## In simple words
 
-$$P(c \mid x_1, \dots, x_n) = \frac{P(c) \, P(x_1, \dots, x_n \mid c)}{P(x_1, \dots, x_n)}$$
+Suppose a doctor sees a patient with a fever and a cough and wants to know which illness is more likely. The doctor thinks: "How common is each illness? And among people with that illness, how often do I see a fever? A cough?" Naive Bayes does exactly this for every class and picks the class with the biggest answer.
 
-The "naive" assumption is that the features are independent of each other once the class is known:
+It is called **naive** because it treats the symptoms as unrelated to each other once the illness is known. That is rarely exactly true, but it makes the maths very easy and the method works surprisingly well.
+
+## Key words
+
+- **Prior** $P(c)$: how common the class is before looking at any feature.
+- **Likelihood** $P(x_j \mid c)$: how often a feature value shows up inside one class.
+- **Posterior** $P(c \mid \mathbf{x})$: the probability of the class after seeing the features. This is what we want.
+- **Laplace smoothing**: adding 1 to every count so that nothing has a probability of exactly zero.
+
+## The maths, step by step
+
+**1. Bayes' theorem.** It turns "how often do the features appear in this class" into "how likely is this class given the features":
+
+$$P(c \mid x_1, \dots, x_n) = \frac{P(c)\; P(x_1, \dots, x_n \mid c)}{P(x_1, \dots, x_n)}$$
+
+**2. The naive assumption.** Features are independent given the class, so the joint probability splits into a product:
 
 $$P(x_1, \dots, x_n \mid c) = \prod_{j=1}^{n} P(x_j \mid c)$$
 
-The denominator is the same for every class, so it can be ignored when only comparing classes:
+**3. The decision rule.** The bottom part, $P(x_1, \dots, x_n)$, is the same for every class, so we skip it when comparing:
 
-$$\hat{c} = \arg\max_c \; P(c) \prod_{j=1}^{n} P(x_j \mid c)$$
+$$\hat{c} = \arg\max_{c} \; P(c) \prod_{j=1}^{n} P(x_j \mid c)$$
 
-## Estimating the probabilities
+($\arg\max$ means "the class that gives the largest value".)
 
-All the mushroom features are categorical, so the probabilities come from simple counting.
-
-Prior of a class, from the training set:
+**4. The prior** is counted from the training rows, where $N_c$ rows have class $c$ out of $N$ in total:
 
 $$P(c) = \frac{N_c}{N}$$
 
-Likelihood with Laplace (add-one) smoothing:
+**5. The likelihood with Laplace smoothing.** Let $n_{c,j,v}$ be the number of rows of class $c$ whose feature $j$ equals value $v$, and let $k_j$ be the number of different values feature $j$ can take:
 
 $$P(x_j = v \mid c) = \frac{n_{c,j,v} + 1}{N_c + k_j}$$
 
-Here $n_{c,j,v}$ is how many training rows of class $c$ have value $v$ in feature $j$, $N_c$ is the number of rows of class $c$, and $k_j$ is the number of different values feature $j$ can take. The +1 makes sure a value never seen with a class does not get probability zero, which would wipe out the whole product.
+Without the "+1", a value that never appeared with a class in training would get probability 0, and since we multiply, one zero would wipe out the whole product. Adding 1 to the top and $k_j$ to the bottom keeps the probabilities of all values of a feature adding up to exactly 1.
 
-## What the code does
+**6. A note about underflow.** Multiplying 22 small numbers gives a very small number. On bigger problems it could round to zero, so it is common to add logarithms instead: $\log P(c) + \sum_j \log P(x_j \mid c)$. The class with the biggest sum is the same class as before.
 
-- Data: `mushrooms.csv`. Missing values marked with `?` are replaced with the most frequent value of the column (the mode).
-- Target: edible = 0, poisonous = 1. 80/20 train and test split with `random_state=42`.
-- The implementation builds a dictionary of every conditional probability $P(x_j = v \mid c)$, prints them, then multiplies the prior with the likelihoods for each test row and takes the class with the larger score. The scores for the first three test rows are printed.
-- Multiplying many small numbers can underflow on larger problems. A common fix is to add logarithms instead of multiplying: $\log P(c) + \sum_j \log P(x_j \mid c)$.
+## A small worked example
+
+Training data for one feature, *odor*, with values `none` or `foul`:
+
+- Edible: 3 rows with odor `none`, `none`, `foul`.
+- Poisonous: 2 rows with odor `foul`, `foul`.
+
+Priors: $P(e) = 3/5 = 0.6$ and $P(p) = 2/5 = 0.4$. The feature has $k = 2$ values.
+
+- $P(\text{none} \mid e) = (2+1)/(3+2) = 0.6$ and $P(\text{foul} \mid e) = (1+1)/(3+2) = 0.4$
+- $P(\text{none} \mid p) = (0+1)/(2+2) = 0.25$ and $P(\text{foul} \mid p) = (2+1)/(2+2) = 0.75$
+
+A new mushroom smells `foul`:
+
+- Edible: $0.6 \times 0.4 = 0.24$
+- Poisonous: $0.4 \times 0.75 = 0.30$
+
+The poisonous score is larger, so the prediction is **poisonous**. Notice that `none` never appeared with the poisonous class, yet thanks to smoothing it still gets 0.25 instead of 0.
+
+## How the code works
+
+1. **Load.** Read `../datasets/mushrooms.csv`. The `?` marks (missing values) are replaced by the most common value of that column.
+2. **Split** 80/20 with `random_state=42`. The target is edible = 0, poisonous = 1.
+3. **Count.** For every feature, every value and every class, the code computes the smoothed likelihood from the formula above and stores it in a dictionary. They are also printed, so you can read the model.
+4. **Predict.** For each test row, start with the prior of a class, multiply by the likelihood of each of its feature values, and keep the class with the larger product. The scores of the first three test rows are printed.
+5. **Report** accuracy, precision, recall, F1, the error rate and the confusion matrix.
+
+There is no training loop, because everything comes from counting.
 
 ## Library version
 
-`libnaivebayes.py` uses scikit-learn's `CategoricalNB(alpha=1)`, which is the same model: categorical features with Laplace smoothing where `alpha=1` is the add-one. The categories are first converted to integer codes. It works with log probabilities internally. `min_categories` makes sure that every category seen anywhere in the data is known, as in the manual version.
+`libnaivebayes.py` uses `CategoricalNB(alpha=1)`. It is the same model: counts with add-one smoothing (`alpha=1`). The text categories are first turned into integer codes. Inside, it adds logarithms to avoid underflow. `min_categories` tells it how many values each feature can take, so that a value seen only in the test set does not break it.
+
+## Strengths and weaknesses
+
+- Very fast, needs little data, easy to understand, and the probabilities can be read directly.
+- The independence assumption is often wrong, which can make the probabilities over-confident, even when the predicted class is still right.
+- Works best with categorical data like this dataset.
+
+## Things to try
+
+- Change the smoothing from 1 to 0.1 or to 5 and see what happens.
+- Print which feature values have the biggest ratio between the two classes. These are the strongest clues.
