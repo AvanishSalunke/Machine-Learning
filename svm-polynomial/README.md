@@ -1,10 +1,10 @@
 # SVM with Polynomial Kernel
 
-File: [svmpolynomial.py](../svmpolynomial.py)
+File: [svmpolynomial.py](svmpolynomial.py)
 
 ## Idea
 
-This is the same soft margin SVM described in [svm-kernel.md](svm-kernel.md), with a different kernel. A polynomial kernel lets the SVM draw curved boundaries by implicitly using all products of the features up to a given degree.
+This is the same soft margin SVM described in [svm-kernel.md](../svm-kernel/README.md), with a different kernel. A polynomial kernel lets the SVM draw curved boundaries by implicitly using all products of the features up to a given degree.
 
 ## Kernel
 
