@@ -1,6 +1,6 @@
 # Recurrent Neural Network (Simple RNN)
 
-Files: [rnn.py](../rnn.py) and [librnn.py](../librnn.py)
+Files: [rnn.py](rnn.py) and [librnn.py](librnn.py)
 
 ## Idea
 
@@ -30,7 +30,7 @@ $$dW_i \mathrel{+}= d\mathbf{a}_t \, \mathbf{x}_t^T, \qquad dW_h \mathrel{+}= d\
 
 $$d\mathbf{h}_{t-1} = W_h^T \, d\mathbf{a}_t$$
 
-The gradients of the shared weights are summed over all time steps. Because the gradient is multiplied by $W_h^T$ and a $\tanh$ derivative at every step, it tends to shrink (vanishing gradient) or blow up (exploding gradient) over long sequences. That is the weakness the [LSTM](lstm.md) and [GRU](gru.md) were designed to fix.
+The gradients of the shared weights are summed over all time steps. Because the gradient is multiplied by $W_h^T$ and a $\tanh$ derivative at every step, it tends to shrink (vanishing gradient) or blow up (exploding gradient) over long sequences. That is the weakness the [LSTM](../lstm/README.md) and [GRU](../gru/README.md) were designed to fix.
 
 ## What the code does
 
