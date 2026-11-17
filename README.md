@@ -97,6 +97,10 @@ A decision tree asks a chain of questions about the features. The folders below 
 - [Gini index](gini-index/README.md): picks the split with the lowest Gini impurity.
 - [Misclassification error](misclassification-error/README.md): picks the split with the lowest error rate.
 
+### Distance-based methods
+
+- [kNN](knn/README.md): classifies a sample by a vote of its $k$ nearest training samples.
+
 ### Support vector machines
 
 An SVM separates two classes with the widest possible margin.
