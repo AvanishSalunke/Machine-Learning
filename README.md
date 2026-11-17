@@ -102,6 +102,10 @@ A decision tree asks a chain of questions about the features. The folders below 
 - [kNN](knn/README.md): classifies a sample by a vote of its $k$ nearest training samples.
 - [K-means](k-means/README.md): groups samples into $K$ clusters around moving centres, with no labels needed.
 
+### Dimensionality reduction
+
+- [PCA](pca/README.md): finds the directions of largest variance and keeps only the first few.
+
 ### Support vector machines
 
 An SVM separates two classes with the widest possible margin.
