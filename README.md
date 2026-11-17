@@ -140,6 +140,10 @@ An HMM has hidden states that we cannot see, and observations that we can. These
 - [Baum-Welch](hmm-baum-welch/README.md): learn the model from observations.
 - [HMM classifier](hmm-classifier/README.md): one HMM per class, to classify sequences.
 
+### Model evaluation
+
+- [K-fold cross-validation](k-fold-cross-validation/README.md): tests a model on $K$ different splits and averages the scores.
+
 ### Data preparation
 
 - [Preprocessing](preprocessing/README.md): cleaning, encoding, splitting and scaling a dataset.
