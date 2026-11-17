@@ -97,9 +97,10 @@ A decision tree asks a chain of questions about the features. The folders below 
 - [Gini index](gini-index/README.md): picks the split with the lowest Gini impurity.
 - [Misclassification error](misclassification-error/README.md): picks the split with the lowest error rate.
 
-### Distance-based methods
+### Distance-based methods and clustering
 
 - [kNN](knn/README.md): classifies a sample by a vote of its $k$ nearest training samples.
+- [K-means](k-means/README.md): groups samples into $K$ clusters around moving centres, with no labels needed.
 
 ### Support vector machines
 
