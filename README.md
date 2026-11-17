@@ -86,6 +86,7 @@ A good way to study: read the README of an algorithm, run the main script, run t
 
 - [Linear regression](linear-regression/README.md): fits a straight line or plane to predict a number, using gradient descent.
 - [Logistic regression](logistic-regression/README.md): a linear model with a sigmoid on top that predicts the probability of a class.
+- [Ridge, lasso and elastic net](ridge-lasso-elastic-net/README.md): linear regression with a penalty that shrinks the weights, and can set some to zero.
 - [Naive Bayes](naive-bayes/README.md): classifies with Bayes' theorem and counted probabilities.
 
 ### Decision trees
